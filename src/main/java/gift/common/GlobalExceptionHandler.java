@@ -1,6 +1,7 @@
 package gift.common;
 
 import gift.common.exceptions.FailedToDeleteException;
+import gift.common.exceptions.FailedToFindException;
 import gift.common.exceptions.JwtValidationException;
 import gift.common.exceptions.LogInFailedException;
 import gift.common.exceptions.MemberAlreadyExistsException;
@@ -139,12 +140,26 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResult> handleFailedToDeleteException(
         FailedToDeleteException ex
     ) {
-        return new ResponseEntity<> (
+        return new ResponseEntity<>(
             new ErrorResult(
                 HttpStatus.FORBIDDEN,
                 ex.getMessage()
             ),
             HttpStatus.FORBIDDEN
+        );
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(value = FailedToFindException.class)
+    public ResponseEntity<ErrorResult> handleFailedToFindException(
+        FailedToFindException ex
+    ) {
+        return new ResponseEntity<>(
+            new ErrorResult(
+                HttpStatus.NOT_FOUND,
+                ex.getMessage()
+            ),
+            HttpStatus.NOT_FOUND
         );
     }
 }
