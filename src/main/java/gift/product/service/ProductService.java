@@ -1,5 +1,6 @@
 package gift.product.service;
 
+import gift.common.exceptions.FailedToFindException;
 import gift.product.domain.Product;
 import gift.product.dto.request.ProductSaveRequest;
 import gift.product.dto.request.ProductUpdateRequest;
@@ -41,6 +42,7 @@ public class ProductService {
     public ProductResponse findById(Long id) {
         return convertToDTO(
             productRepository.findById(id)
+                .orElseThrow(() -> new FailedToFindException("존재하지 않는 상품입니다."))
         );
     }
 
@@ -54,23 +56,25 @@ public class ProductService {
 
     @Transactional
     public ProductResponse update(Long id, ProductUpdateRequest productUpdateRequest) {
-        Product product = new Product(
+        Product product =
+            productRepository.findById(id)
+                .orElseThrow(() -> new FailedToFindException("존재하지 않는 상품입니다."));
+
+        product.update(
             productUpdateRequest.name(),
             productUpdateRequest.price(),
             productUpdateRequest.imageURL()
         );
 
-        productRepository.update(id, product);
-
         return convertToDTO(
-            productRepository.findById(id)
+            productRepository.save(product)
         );
     }
 
     @Transactional
     public void delete(Long id) {
         wishlistRepository.deleteByProductId(id);
-        productRepository.delete(id);
+        productRepository.deleteById(id);
     }
 
     private ProductResponse convertToDTO(Product product) {

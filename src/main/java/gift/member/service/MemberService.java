@@ -1,6 +1,7 @@
 package gift.member.service;
 
 import gift.common.PasswordEncoder;
+import gift.common.exceptions.FailedToFindException;
 import gift.common.exceptions.LogInFailedException;
 import gift.common.exceptions.MemberAlreadyExistsException;
 import gift.jwt.JwtResponse;
@@ -11,7 +12,6 @@ import gift.member.dto.LogInRequest;
 import gift.member.dto.MemberResponse;
 import gift.member.dto.RegisterRequest;
 import gift.member.repository.MemberRepository;
-import gift.wishlist.repository.WishlistRepository;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,18 +22,15 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final MemberRepository memberRepository;
-    private final WishlistRepository wishlistRepository;
 
     public MemberService(
         PasswordEncoder passwordEncoder,
         JwtUtil jwtUtil,
-        MemberRepository memberRepository,
-        WishlistRepository wishlistRepository
+        MemberRepository memberRepository
     ) {
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
         this.memberRepository = memberRepository;
-        this.wishlistRepository = wishlistRepository;
     }
 
     @Transactional
@@ -95,8 +92,8 @@ public class MemberService {
 
         return convertToDTO(
             memberRepository.findById(id)
+                .orElseThrow(() -> new FailedToFindException("존재하지 않는 회원입니다."))
         );
-
     }
 
     public Long getIdFromToken(String token) {
