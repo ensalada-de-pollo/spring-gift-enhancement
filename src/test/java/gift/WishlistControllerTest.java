@@ -88,7 +88,7 @@ public class WishlistControllerTest {
     @Test
     void 위시_상품_추가_테스트() {
         // given
-        WishAddRequest wishAddRequest = new WishAddRequest(3L, 5);
+        WishAddRequest wishAddRequest = new WishAddRequest(3L);
 
         // when
         var response = restClient.post()
@@ -103,16 +103,15 @@ public class WishlistControllerTest {
         assertThat(wishResponse.id()).isEqualTo(1L);
         assertThat(wishResponse.memberId()).isEqualTo(1L);
         assertThat(wishResponse.productId()).isEqualTo(3L);
-        assertThat(wishResponse.quantity()).isEqualTo(5);
     }
 
     @Test
     void 위시_상품_조회_테스트() {
         // given
         List<WishAddRequest> wishAddRequestList = new ArrayList<>();
-        wishAddRequestList.add(new WishAddRequest(3L, 5));
-        wishAddRequestList.add(new WishAddRequest(4L, 3));
-        wishAddRequestList.add(new WishAddRequest(1L, 7));
+        wishAddRequestList.add(new WishAddRequest(3L));
+        wishAddRequestList.add(new WishAddRequest(4L));
+        wishAddRequestList.add(new WishAddRequest(1L));
         for (WishAddRequest wishAddRequest : wishAddRequestList) {
             restClient.post()
                 .body(wishAddRequest)
@@ -137,7 +136,6 @@ public class WishlistControllerTest {
             WishResponse actual = wishResponses.get(i);
             assertThat(actual.memberId()).isEqualTo(1L);
             assertThat(actual.productId()).isEqualTo(expected.productId());
-            assertThat(actual.quantity()).isEqualTo(expected.quantity());
         }
     }
 
@@ -145,9 +143,9 @@ public class WishlistControllerTest {
     void 위시_상품_삭제_테스트() {
         // given
         List<WishAddRequest> wishAddRequestList = new ArrayList<>();
-        wishAddRequestList.add(new WishAddRequest(3L, 5));
-        wishAddRequestList.add(new WishAddRequest(4L, 3));
-        wishAddRequestList.add(new WishAddRequest(1L, 7));
+        wishAddRequestList.add(new WishAddRequest(3L));
+        wishAddRequestList.add(new WishAddRequest(4L));
+        wishAddRequestList.add(new WishAddRequest(1L));
         for (WishAddRequest wishAddRequest : wishAddRequestList) {
             restClient.post()
                 .body(wishAddRequest)
@@ -180,8 +178,8 @@ public class WishlistControllerTest {
     @Test
     void 같은_상품을_위시리스트에_추가하려는_경우() {
         // given
-        WishAddRequest firstRequest = new WishAddRequest(3L, 5);
-        WishAddRequest secondRequest = new WishAddRequest(3L, 3);
+        WishAddRequest firstRequest = new WishAddRequest(3L);
+        WishAddRequest secondRequest = new WishAddRequest(3L);
         restClient.post()
             .body(firstRequest)
             .retrieve()
