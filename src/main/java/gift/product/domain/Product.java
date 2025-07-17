@@ -22,7 +22,7 @@ public class Product {
     @Column(name = "image_url", nullable = false)
     private String imageURL;
 
-    public Product() {
+    protected Product() {
 
     }
 

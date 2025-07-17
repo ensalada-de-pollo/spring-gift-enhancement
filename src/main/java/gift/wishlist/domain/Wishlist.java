@@ -27,7 +27,7 @@ public class Wishlist {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    public Wishlist() {
+    protected Wishlist() {
 
     }
 
