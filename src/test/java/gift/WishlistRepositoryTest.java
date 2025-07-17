@@ -113,7 +113,7 @@ public class WishlistRepositoryTest {
             wish.getMember().getId()
         );
 
-        Optional<Wishlist> deletedWish = wishlistRepository.findById(1);
+        Optional<Wishlist> deletedWish = wishlistRepository.findById(1L);
 
         assertThat(deletedWish).isEmpty();
     }
@@ -126,7 +126,7 @@ public class WishlistRepositoryTest {
 
         wishlistRepository.deleteByProductId(wish.getProduct().getId());
 
-        Optional<Wishlist> deletedWish = wishlistRepository.findById(1);
+        Optional<Wishlist> deletedWish = wishlistRepository.findById(1L);
 
         assertThat(deletedWish).isEmpty();
     }

@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface WishlistRepository extends JpaRepository<Wishlist, Integer> {
+public interface WishlistRepository extends JpaRepository<Wishlist, Long> {
 
     Optional<Wishlist> findByMemberIdAndProductId(Long memberId, Long productId);
 
