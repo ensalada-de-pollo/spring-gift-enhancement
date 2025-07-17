@@ -27,20 +27,14 @@ public class MemberController {
 
     @PostMapping("/register")
     public ResponseEntity<JwtResponse> register(
-        @Valid
-        @RequestBody
-        RegisterRequest registerRequest
-    ) {
+        @Valid @RequestBody RegisterRequest registerRequest) {
         return ResponseEntity.status(HttpStatus.CREATED)
             .body(memberService.register(registerRequest));
     }
 
     @PostMapping("/login")
     public ResponseEntity<JwtResponse> logIn(
-        @Valid
-        @RequestBody
-        LogInRequest loginRequest
-    ) {
+        @Valid @RequestBody LogInRequest loginRequest) {
         return ResponseEntity.ok(memberService.logIn(loginRequest));
     }
 

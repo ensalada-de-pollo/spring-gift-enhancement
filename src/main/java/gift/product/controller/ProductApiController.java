@@ -28,10 +28,7 @@ public class ProductApiController {
 
     @PostMapping
     public ResponseEntity<ProductResponse> createProduct(
-        @Valid
-        @RequestBody
-        ProductSaveRequest productSaveRequest
-    ) {
+        @Valid @RequestBody ProductSaveRequest productSaveRequest) {
         return ResponseEntity.status(HttpStatus.CREATED)
             .body(productService.save(productSaveRequest));
     }
@@ -43,13 +40,8 @@ public class ProductApiController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<ProductResponse> updateProduct(
-        @PathVariable("id")
-        Long id,
-
-        @Valid
-        @RequestBody
-        ProductUpdateRequest productUpdateRequest
-    ) {
+        @PathVariable("id") Long id,
+        @Valid @RequestBody ProductUpdateRequest productUpdateRequest) {
         return ResponseEntity.ok(productService.update(id, productUpdateRequest));
     }
 

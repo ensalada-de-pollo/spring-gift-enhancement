@@ -24,8 +24,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResult> handleMethodArgumentNotValidException(
-        MethodArgumentNotValidException ex
-    ) {
+        MethodArgumentNotValidException ex) {
         return new ResponseEntity<>(
             new ErrorResult(
                 HttpStatus.BAD_REQUEST,
@@ -54,8 +53,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(value = EmptyResultDataAccessException.class)
     public ResponseEntity<ErrorResult> handleEmptyResultDataAccessException(
-        EmptyResultDataAccessException ex
-    ) {
+        EmptyResultDataAccessException ex) {
         return new ResponseEntity<>(
             new ErrorResult(
                 HttpStatus.NOT_FOUND,
@@ -68,8 +66,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(value = JwtValidationException.class)
     public ResponseEntity<ErrorResult> handleJwtValidationException(
-        JwtValidationException ex
-    ) {
+        JwtValidationException ex) {
         return new ResponseEntity<>(
             new ErrorResult(
                 HttpStatus.UNAUTHORIZED,
@@ -82,8 +79,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(value = LogInFailedException.class)
     public ResponseEntity<ErrorResult> handlePasswordMismatchException(
-        LogInFailedException ex
-    ) {
+        LogInFailedException ex) {
         return new ResponseEntity<>(
             new ErrorResult(
                 HttpStatus.UNAUTHORIZED,
@@ -96,8 +92,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(value = MemberAlreadyExistsException.class)
     public ResponseEntity<ErrorResult> handleMemberAlreadyExistsException(
-        MemberAlreadyExistsException ex
-    ) {
+        MemberAlreadyExistsException ex) {
         return new ResponseEntity<>(
             new ErrorResult(
                 HttpStatus.CONFLICT,
@@ -110,8 +105,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(value = NullTokenException.class)
     public ResponseEntity<ErrorResult> handleNullTokenException(
-        NullTokenException ex
-    ) {
+        NullTokenException ex) {
         return new ResponseEntity<>(
             new ErrorResult(
                 HttpStatus.UNAUTHORIZED,
@@ -124,8 +118,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(value = WishAlreadyExistsException.class)
     public ResponseEntity<ErrorResult> handleWishAlreadyExistsException(
-        WishAlreadyExistsException ex
-    ) {
+        WishAlreadyExistsException ex) {
         return new ResponseEntity<>(
             new ErrorResult(
                 HttpStatus.CONFLICT,
@@ -138,8 +131,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(value = FailedToDeleteException.class)
     public ResponseEntity<ErrorResult> handleFailedToDeleteException(
-        FailedToDeleteException ex
-    ) {
+        FailedToDeleteException ex) {
         return new ResponseEntity<>(
             new ErrorResult(
                 HttpStatus.FORBIDDEN,
@@ -152,8 +144,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(value = FailedToFindException.class)
     public ResponseEntity<ErrorResult> handleFailedToFindException(
-        FailedToFindException ex
-    ) {
+        FailedToFindException ex) {
         return new ResponseEntity<>(
             new ErrorResult(
                 HttpStatus.NOT_FOUND,
