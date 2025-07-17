@@ -17,7 +17,7 @@ public class MemberRepositoryTest {
     private MemberRepository memberRepository;
 
     @Test
-    void save() {
+    void 멤버_저장_테스트() {
         Member member = new Member(
             "asdf@gmail.com",
             "passwd",
@@ -35,7 +35,7 @@ public class MemberRepositoryTest {
     }
 
     @Test
-    void findByEmail() {
+    void email로_멤버를_조회() {
         String email = "asdf@gmail.com";
         memberRepository.save(new Member(email, "passwd", UserRole.NORMAL));
 

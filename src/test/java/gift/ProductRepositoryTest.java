@@ -16,7 +16,7 @@ public class ProductRepositoryTest {
     private ProductRepository productRepository;
 
     @Test
-    public void save() {
+    public void 상품_저장_테스트() {
         Product product = new Product("상품1", 1234L, "testurl");
 
         Product savedProduct = productRepository.save(product);

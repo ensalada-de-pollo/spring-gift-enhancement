@@ -48,7 +48,7 @@ public class WishlistRepositoryTest {
     }
 
     @Test
-    void save() {
+    void 위시_저장_테스트() {
         Wishlist wish = new Wishlist(product, member);
 
         Wishlist savedWish = wishlistRepository.save(wish);
@@ -61,7 +61,7 @@ public class WishlistRepositoryTest {
     }
 
     @Test
-    void findByMemberIdAndProductId() {
+    void 멤버의_id와_상품의_id로_위시_조회() {
         Wishlist wish = new Wishlist(product, member);
         wishlistRepository.save(wish);
 
@@ -77,7 +77,7 @@ public class WishlistRepositoryTest {
     }
 
     @Test
-    void findByMemberId() {
+    void 멤버의_id로_위시_목록_조회() {
         Wishlist wish = new Wishlist(product, member);
         wishlistRepository.save(wish);
 
@@ -93,7 +93,7 @@ public class WishlistRepositoryTest {
     }
 
     @Test
-    void getMemberIdById() {
+    void 위시_id로_멤버의_id를_조회() {
         Wishlist wish = new Wishlist(product, member);
         wishlistRepository.save(wish);
 
@@ -103,7 +103,7 @@ public class WishlistRepositoryTest {
     }
 
     @Test
-    void deleteByIdAndMemberId() {
+    void 위시의_id와_멤버의_id가_일치하면_위시를_삭제할_수_있음() {
         Wishlist wish = new Wishlist(product, member);
         Wishlist savedWish = wishlistRepository.save(wish);
         assertThat(savedWish.getId()).isNotNull();
@@ -119,7 +119,7 @@ public class WishlistRepositoryTest {
     }
 
     @Test
-    void deleteByProductId() {
+    void 상품_id로_해당_상품을_참조하는_위시를_전부_삭제() {
         Wishlist wish = new Wishlist(product, member);
         Wishlist savedWish = wishlistRepository.save(wish);
         assertThat(savedWish.getId()).isNotNull();
