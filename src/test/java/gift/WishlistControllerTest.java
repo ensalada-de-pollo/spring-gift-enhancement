@@ -196,4 +196,40 @@ public class WishlistControllerTest {
             .withMessageContaining(
                 "이미 위시리스트에 추가된 상품입니다.");
     }
+
+    @Test
+    void 상품을_삭제했을_때_위시도_함께_삭제() {
+        // given
+        List<WishAddRequest> wishAddRequestList = new ArrayList<>();
+        wishAddRequestList.add(new WishAddRequest(3L));
+        wishAddRequestList.add(new WishAddRequest(4L));
+        wishAddRequestList.add(new WishAddRequest(1L));
+        for (WishAddRequest wishAddRequest : wishAddRequestList) {
+            restClient.post()
+                .body(wishAddRequest)
+                .retrieve()
+                .toEntity(WishResponse.class);
+        }
+        var beforeResponse = restClient.get()
+            .retrieve()
+            .toEntity(new ParameterizedTypeReference<List<WishResponse>>() {
+            });
+        int beforeSize = beforeResponse.getBody().size();
+
+        // when
+        var response = restClient.delete()
+            .uri(baseURL + "/products/{productId}", 4L)
+            .retrieve()
+            .toEntity(String.class);
+
+        // then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).contains("상품 삭제가 완료되었습니다.");
+        var afterResponse = restClient.get()
+            .retrieve()
+            .toEntity(new ParameterizedTypeReference<List<WishResponse>>() {
+            });
+        int afterSize = afterResponse.getBody().size();
+        assertThat(afterSize).isEqualTo(beforeSize - 1);
+    }
 }
