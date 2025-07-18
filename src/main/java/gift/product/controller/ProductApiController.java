@@ -1,10 +1,12 @@
 package gift.product.controller;
 
+import gift.product.dto.request.PageFindRequest;
 import gift.product.dto.request.ProductSaveRequest;
 import gift.product.dto.request.ProductUpdateRequest;
 import gift.product.dto.response.ProductResponse;
 import gift.product.service.ProductService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -36,6 +38,11 @@ public class ProductApiController {
     @GetMapping("/{id}")
     public ResponseEntity<ProductResponse> findById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(productService.findById(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<ProductResponse>> findPage(PageFindRequest pageFindRequest) {
+        return ResponseEntity.ok(productService.findPage(pageFindRequest));
     }
 
     @PatchMapping("/{id}")
