@@ -58,3 +58,44 @@
 - 잘못 설정했던 WishlistRepository의 PK 타입을 Long으로 알맞게 수정하였습니다.
 - 각 엔티티 클래스 디폴트 생성자는 JPA 이외에 사용처가 없기 때문에 접근제어자를 protected로 수정하였습니다.
 - RepositoryTest의 테스트 메서드 이름을 테스트 용도를 파악할 수 있도록 수정하여 가독성을 개선하였습니다.
+
+### Step2
+
+- 페이지네이션을 사용하여 상품 목록을 조회할 수 있도록 하기
+
+  이를 구현하기 위해서 우선 QueryParameter를 받을 PageFindRequest라는 이름의 record 클래스를 선언하였습니다.
+
+    ```java
+    public record PageFindRequest(int page, int size, Sort.Direction direction, String criteria) {
+    
+    }
+  
+    @GetMapping
+    public ResponseEntity<Page<ProductResponse>> findPage(PageFindRequest pageFindRequest) {
+      ...
+    ```
+
+- 기존 Product 삭제 시 wishlist repository의 delete 메서드를 직접 호출하던 방식에서 Spring Event를 사용하는 방식으로 리팩토링 하였습니다.
+
+  - EventPublisher 클래스를 만들어서, 특정 이벤트가 발생할 시 발행을 담당하도록 하였습니다.
+  - Product를 삭제하여 발생하는 이벤트는 ProductDeleteEvent라는 record 클래스로 표현을 하였습니다.
+  - 기존 wishlistRepository.deleteByProductId를 호출하여 삭제하는 코드를 eventPublisher로 이벤트를 발행하는 코드로 변경하였습니다.
+
+  ```java    
+  @Transactional
+  public void delete(Long id) {
+      eventPublisher.publish(ProductDeleteEvent.of(id));
+      productRepository.deleteById(id);
+  }
+  ```
+
+  - wishlistService에는 `@EventListener` 어노테이션을 추가하여 해당 이벤트 발행시 동기적으로 처리할 수 있도록 하였습니다.
+  ```java
+  @EventListener
+  @Transactional
+  public void handleDeleteEvent(ProductDeleteEvent event) {
+      wishlistRepository.deleteByProductId(event.id());
+  }
+  ```
+
+  - WishlistcontrollerTest에 해당 부분이 정상적으로 작동하는 지에 대한 테스트 코드를 추가하였습니다.
