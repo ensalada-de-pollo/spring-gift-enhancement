@@ -1,42 +1,50 @@
 package gift.wishlist.domain;
 
+import gift.member.domain.Member;
+import gift.product.domain.Product;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "wishlist")
 public class Wishlist {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long productId;
-    private Long memberId;
-    private Integer quantity;
 
-    public Wishlist(Long id, Long productId, Long memberId, Integer quantity) {
-        this.id = id;
-        this.productId = productId;
-        this.memberId = memberId;
-        this.quantity = quantity;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
+
+    protected Wishlist() {
+
     }
 
-    public Wishlist(Long productId, Long memberId, Integer quantity) {
-        this.productId = productId;
-        this.memberId = memberId;
-        this.quantity = quantity;
+    public Wishlist(Product product, Member member) {
+        this.product = product;
+        this.member = member;
     }
 
     public Long getId() {
         return id;
     }
 
-    public Long getProductId() {
-        return productId;
+    public Product getProduct() {
+        return product;
     }
 
-    public Long getMemberId() {
-        return memberId;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public Wishlist setId(Long id) {
-        return new Wishlist(id, productId, memberId, quantity);
+    public Member getMember() {
+        return member;
     }
 }

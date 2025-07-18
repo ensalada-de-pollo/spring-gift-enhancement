@@ -28,24 +28,21 @@ public class WishlistController {
     @PostMapping
     public ResponseEntity<WishResponse> addWish(
         @RequestBody WishAddRequest wishAddRequest,
-        @LogInMember Long memberId
-    ) {
+        @LogInMember Long memberId) {
         return ResponseEntity.status(HttpStatus.CREATED)
             .body(wishlistService.addWish(wishAddRequest, memberId));
     }
 
     @GetMapping
     public ResponseEntity<List<WishResponse>> findAll(
-        @LogInMember Long memberId
-    ) {
+        @LogInMember Long memberId) {
         return ResponseEntity.ok(wishlistService.getWishes(memberId));
     }
 
     @DeleteMapping("/{wishId}")
     public ResponseEntity<String> deleteWish(
         @PathVariable Long wishId,
-        @LogInMember Long memberId
-    ) {
+        @LogInMember Long memberId) {
         wishlistService.delete(wishId, memberId);
 
         return ResponseEntity.ok("위시리스트 삭제가 완료되었습니다.");

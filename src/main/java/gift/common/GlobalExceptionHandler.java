@@ -1,6 +1,7 @@
 package gift.common;
 
 import gift.common.exceptions.FailedToDeleteException;
+import gift.common.exceptions.FailedToFindException;
 import gift.common.exceptions.JwtValidationException;
 import gift.common.exceptions.LogInFailedException;
 import gift.common.exceptions.MemberAlreadyExistsException;
@@ -23,8 +24,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResult> handleMethodArgumentNotValidException(
-        MethodArgumentNotValidException ex
-    ) {
+        MethodArgumentNotValidException ex) {
         return new ResponseEntity<>(
             new ErrorResult(
                 HttpStatus.BAD_REQUEST,
@@ -53,8 +53,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(value = EmptyResultDataAccessException.class)
     public ResponseEntity<ErrorResult> handleEmptyResultDataAccessException(
-        EmptyResultDataAccessException ex
-    ) {
+        EmptyResultDataAccessException ex) {
         return new ResponseEntity<>(
             new ErrorResult(
                 HttpStatus.NOT_FOUND,
@@ -67,8 +66,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(value = JwtValidationException.class)
     public ResponseEntity<ErrorResult> handleJwtValidationException(
-        JwtValidationException ex
-    ) {
+        JwtValidationException ex) {
         return new ResponseEntity<>(
             new ErrorResult(
                 HttpStatus.UNAUTHORIZED,
@@ -81,8 +79,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(value = LogInFailedException.class)
     public ResponseEntity<ErrorResult> handlePasswordMismatchException(
-        LogInFailedException ex
-    ) {
+        LogInFailedException ex) {
         return new ResponseEntity<>(
             new ErrorResult(
                 HttpStatus.UNAUTHORIZED,
@@ -95,8 +92,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(value = MemberAlreadyExistsException.class)
     public ResponseEntity<ErrorResult> handleMemberAlreadyExistsException(
-        MemberAlreadyExistsException ex
-    ) {
+        MemberAlreadyExistsException ex) {
         return new ResponseEntity<>(
             new ErrorResult(
                 HttpStatus.CONFLICT,
@@ -109,8 +105,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(value = NullTokenException.class)
     public ResponseEntity<ErrorResult> handleNullTokenException(
-        NullTokenException ex
-    ) {
+        NullTokenException ex) {
         return new ResponseEntity<>(
             new ErrorResult(
                 HttpStatus.UNAUTHORIZED,
@@ -123,8 +118,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(value = WishAlreadyExistsException.class)
     public ResponseEntity<ErrorResult> handleWishAlreadyExistsException(
-        WishAlreadyExistsException ex
-    ) {
+        WishAlreadyExistsException ex) {
         return new ResponseEntity<>(
             new ErrorResult(
                 HttpStatus.CONFLICT,
@@ -137,14 +131,26 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(value = FailedToDeleteException.class)
     public ResponseEntity<ErrorResult> handleFailedToDeleteException(
-        FailedToDeleteException ex
-    ) {
-        return new ResponseEntity<> (
+        FailedToDeleteException ex) {
+        return new ResponseEntity<>(
             new ErrorResult(
                 HttpStatus.FORBIDDEN,
                 ex.getMessage()
             ),
             HttpStatus.FORBIDDEN
+        );
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(value = FailedToFindException.class)
+    public ResponseEntity<ErrorResult> handleFailedToFindException(
+        FailedToFindException ex) {
+        return new ResponseEntity<>(
+            new ErrorResult(
+                HttpStatus.NOT_FOUND,
+                ex.getMessage()
+            ),
+            HttpStatus.NOT_FOUND
         );
     }
 }

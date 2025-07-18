@@ -204,13 +204,13 @@ public class ProductApiControllerTest {
         assertThat(deleteResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(deleteResponse.getBody()).contains("상품 삭제가 완료되었습니다.");
 
-        assertThatExceptionOfType(HttpServerErrorException.InternalServerError.class)
+        assertThatExceptionOfType(HttpClientErrorException.NotFound.class)
             .isThrownBy(
                 () ->
                     restClient.get()
                         .uri("/{id}", id)
                         .retrieve()
-                        .toEntity(void.class)
+                        .toEntity(ErrorResult.class)
             );
 
     }
