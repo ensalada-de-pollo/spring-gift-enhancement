@@ -41,7 +41,7 @@ public class ProductApiController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ProductResponse>> findPage(PageFindRequest pageFindRequest) {
+    public ResponseEntity<Page<ProductResponse>> findPage(@Valid PageFindRequest pageFindRequest) {
         return ResponseEntity.ok(productService.findPage(pageFindRequest));
     }
 
