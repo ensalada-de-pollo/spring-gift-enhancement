@@ -5,6 +5,7 @@ import gift.common.exceptions.FailedToFindException;
 import gift.option.domain.Option;
 import gift.option.dto.OptionAddRequest;
 import gift.option.dto.OptionResponse;
+import gift.option.dto.OptionUpdateRequest;
 import gift.option.repository.OptionRepository;
 import gift.product.domain.Product;
 import gift.product.repository.ProductRepository;
@@ -54,6 +55,21 @@ public class OptionService {
             .stream()
             .map(this::convertToDTO)
             .toList();
+    }
+
+    public OptionResponse updateOption(
+        Long productId,
+        Long optionId,
+        OptionUpdateRequest optionUpdateRequest) {
+        findProduct(productId);
+
+        Option option =
+            optionRepository.findById(optionId)
+                .orElseThrow(() -> new FailedToFindException("존재하지 않는 옵션입니다."));
+
+        option.update(optionUpdateRequest.name());
+        
+        return convertToDTO(optionRepository.save(option));
     }
 
     private Product findProduct(Long productId) {

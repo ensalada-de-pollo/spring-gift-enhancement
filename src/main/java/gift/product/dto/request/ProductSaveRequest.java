@@ -1,6 +1,6 @@
 package gift.product.dto.request;
 
-import gift.common.annotation.NameValidation;
+import gift.common.annotation.ProductNameValidation;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -9,7 +9,7 @@ public record ProductSaveRequest(
     @NotBlank(
         message = "상품 이름을 입력해주세요."
     )
-    @NameValidation
+    @ProductNameValidation
     String name,
 
     @NotNull(

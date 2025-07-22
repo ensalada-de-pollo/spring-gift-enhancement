@@ -59,4 +59,8 @@ public class Option {
 
         return this;
     }
+
+    public void update(String name) {
+        this.name = name;
+    }
 }
