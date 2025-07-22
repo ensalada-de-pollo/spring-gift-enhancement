@@ -1,6 +1,5 @@
 package gift.product.service;
 
-import gift.common.event.EventPublisher;
 import gift.common.event.ProductDeleteEvent;
 import gift.common.exceptions.FailedToFindException;
 import gift.product.domain.Product;
@@ -10,6 +9,7 @@ import gift.product.dto.request.ProductUpdateRequest;
 import gift.product.dto.response.ProductResponse;
 import gift.product.repository.ProductRepository;
 import java.util.List;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,11 +21,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final EventPublisher eventPublisher;
+    private final ApplicationEventPublisher eventPublisher;
 
     public ProductService(
         ProductRepository productRepository,
-        EventPublisher eventPublisher) {
+        ApplicationEventPublisher eventPublisher) {
         this.productRepository = productRepository;
         this.eventPublisher = eventPublisher;
     }
@@ -93,7 +93,7 @@ public class ProductService {
 
     @Transactional
     public void delete(Long id) {
-        eventPublisher.publish(ProductDeleteEvent.of(id));
+        eventPublisher.publishEvent(ProductDeleteEvent.of(id));
         productRepository.deleteById(id);
     }
 
