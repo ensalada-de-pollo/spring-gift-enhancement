@@ -8,6 +8,7 @@ import gift.option.dto.OptionResponse;
 import gift.option.repository.OptionRepository;
 import gift.product.domain.Product;
 import gift.product.repository.ProductRepository;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 
@@ -33,9 +34,7 @@ public class OptionService {
             throw new AlreadyExistsException("이미 존재하는 옵션명입니다.");
         }
 
-        Product product =
-            productRepository.findById(productId)
-                .orElseThrow(() -> new FailedToFindException("존재하지 않는 상품입니다."));
+        Product product = findProduct(productId);
 
         return convertToDTO(
             optionRepository.save(
@@ -46,6 +45,20 @@ public class OptionService {
                 )
             )
         );
+    }
+
+    public List<OptionResponse> getOptions(Long productId) {
+        findProduct(productId);
+
+        return optionRepository.findByProductId(productId)
+            .stream()
+            .map(this::convertToDTO)
+            .toList();
+    }
+
+    private Product findProduct(Long productId) {
+        return productRepository.findById(productId)
+            .orElseThrow(() -> new FailedToFindException("존재하지 않는 상품입니다."));
     }
 
     private OptionResponse convertToDTO(Option option) {
