@@ -1,6 +1,8 @@
 package gift.option.service;
 
+import gift.common.event.ProductDeleteEvent;
 import gift.common.exceptions.AlreadyExistsException;
+import gift.common.exceptions.FailedToDeleteException;
 import gift.common.exceptions.FailedToFindException;
 import gift.option.domain.Option;
 import gift.option.dto.OptionAddRequest;
@@ -11,7 +13,9 @@ import gift.product.domain.Product;
 import gift.product.repository.ProductRepository;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OptionService {
@@ -26,6 +30,7 @@ public class OptionService {
         this.productRepository = productRepository;
     }
 
+    @Transactional
     public OptionResponse addOption(Long productId, OptionAddRequest optionAddRequest) {
 
         Optional<Option> option =
@@ -48,6 +53,7 @@ public class OptionService {
         );
     }
 
+    @Transactional(readOnly = true)
     public List<OptionResponse> getOptions(Long productId) {
         findProduct(productId);
 
@@ -57,6 +63,7 @@ public class OptionService {
             .toList();
     }
 
+    @Transactional
     public OptionResponse updateOption(
         Long productId,
         Long optionId,
@@ -68,8 +75,31 @@ public class OptionService {
                 .orElseThrow(() -> new FailedToFindException("존재하지 않는 옵션입니다."));
 
         option.update(optionUpdateRequest.name());
-        
+
         return convertToDTO(optionRepository.save(option));
+    }
+
+    @Transactional
+    public void deleteOption(Long productId, Long optionId) {
+        int size = optionRepository.findByProductId(productId).size();
+
+        if (size <= 1) {
+            throw new FailedToDeleteException("상품은 최소 하나의 옵션을 가지고 있어야 합니다.");
+        }
+
+        Product product = findProduct(productId);
+
+        if (!productId.equals(product.getId())) {
+            throw new FailedToDeleteException("해당하는 상품의 옵션이 아닙니다.");
+        }
+
+        optionRepository.deleteById(optionId);
+    }
+
+    @EventListener
+    @Transactional
+    public void handleDeleteEvent(ProductDeleteEvent event) {
+        optionRepository.deleteByProductId(event.id());
     }
 
     private Product findProduct(Long productId) {
