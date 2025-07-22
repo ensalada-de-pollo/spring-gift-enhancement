@@ -1,13 +1,19 @@
 package gift.product.service;
 
+import gift.common.event.EventPublisher;
+import gift.common.event.ProductDeleteEvent;
 import gift.common.exceptions.FailedToFindException;
 import gift.product.domain.Product;
+import gift.product.dto.request.PageFindRequest;
 import gift.product.dto.request.ProductSaveRequest;
 import gift.product.dto.request.ProductUpdateRequest;
 import gift.product.dto.response.ProductResponse;
 import gift.product.repository.ProductRepository;
-import gift.wishlist.repository.WishlistRepository;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,14 +21,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final WishlistRepository wishlistRepository;
+    private final EventPublisher eventPublisher;
 
     public ProductService(
         ProductRepository productRepository,
-        WishlistRepository wishlistRepository
-    ) {
+        EventPublisher eventPublisher) {
         this.productRepository = productRepository;
-        this.wishlistRepository = wishlistRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     @Transactional
@@ -54,6 +59,21 @@ public class ProductService {
             .toList();
     }
 
+    @Transactional(readOnly = true)
+    public Page<ProductResponse> findPage(PageFindRequest pageFindRequest) {
+        Pageable pageable = PageRequest.of(
+            pageFindRequest.page(),
+            pageFindRequest.size(),
+            Sort.by(
+                pageFindRequest.direction(),
+                pageFindRequest.criteria()
+            )
+        );
+
+        return productRepository.findAll(pageable)
+            .map(this::convertToDTO);
+    }
+
     @Transactional
     public ProductResponse update(Long id, ProductUpdateRequest productUpdateRequest) {
         Product product =
@@ -73,7 +93,7 @@ public class ProductService {
 
     @Transactional
     public void delete(Long id) {
-        wishlistRepository.deleteByProductId(id);
+        eventPublisher.publish(ProductDeleteEvent.of(id));
         productRepository.deleteById(id);
     }
 

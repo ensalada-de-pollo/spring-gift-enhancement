@@ -1,5 +1,6 @@
 package gift.wishlist.service;
 
+import gift.common.event.ProductDeleteEvent;
 import gift.common.exceptions.FailedToDeleteException;
 import gift.common.exceptions.FailedToFindException;
 import gift.common.exceptions.WishAlreadyExistsException;
@@ -13,6 +14,7 @@ import gift.wishlist.dto.WishResponse;
 import gift.wishlist.repository.WishlistRepository;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -82,6 +84,12 @@ public class WishlistService {
         }
 
         wishlistRepository.deleteByIdAndMemberId(wishId, memberId);
+    }
+
+    @EventListener
+    @Transactional
+    public void handleDeleteEvent(ProductDeleteEvent event) {
+        wishlistRepository.deleteByProductId(event.id());
     }
 
     private WishResponse convertToDTO(Wishlist wishlist) {
