@@ -1,9 +1,9 @@
 package gift.member.service;
 
 import gift.common.PasswordEncoder;
+import gift.common.exceptions.AlreadyExistsException;
 import gift.common.exceptions.FailedToFindException;
 import gift.common.exceptions.LogInFailedException;
-import gift.common.exceptions.MemberAlreadyExistsException;
 import gift.jwt.JwtResponse;
 import gift.jwt.JwtUtil;
 import gift.member.domain.Member;
@@ -40,7 +40,7 @@ public class MemberService {
         Optional<Member> checkExists = memberRepository.findByEmail(email);
 
         if (checkExists.isPresent()) {
-            throw new MemberAlreadyExistsException("이미 존재하는 사용자입니다.");
+            throw new AlreadyExistsException("이미 존재하는 사용자입니다.");
         }
 
         String encryptedPassword = passwordEncoder.encrypt(email, registerRequest.password());

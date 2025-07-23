@@ -1,9 +1,9 @@
 package gift.wishlist.service;
 
 import gift.common.event.ProductDeleteEvent;
+import gift.common.exceptions.AlreadyExistsException;
 import gift.common.exceptions.FailedToDeleteException;
 import gift.common.exceptions.FailedToFindException;
-import gift.common.exceptions.WishAlreadyExistsException;
 import gift.member.domain.Member;
 import gift.member.repository.MemberRepository;
 import gift.product.domain.Product;
@@ -46,7 +46,7 @@ public class WishlistService {
             );
 
         if (wishlist.isPresent()) {
-            throw new WishAlreadyExistsException("이미 위시리스트에 추가된 상품입니다.");
+            throw new AlreadyExistsException("이미 위시리스트에 추가된 상품입니다.");
         }
 
         Product product =

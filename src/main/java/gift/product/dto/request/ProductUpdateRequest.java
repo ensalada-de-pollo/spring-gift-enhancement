@@ -1,10 +1,10 @@
 package gift.product.dto.request;
 
-import gift.common.annotation.NameValidation;
+import gift.common.annotation.ProductNameValidation;
 import jakarta.validation.constraints.PositiveOrZero;
 
 public record ProductUpdateRequest(
-    @NameValidation
+    @ProductNameValidation
     String name,
 
     @PositiveOrZero(

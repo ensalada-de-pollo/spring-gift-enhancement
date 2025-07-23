@@ -1,6 +1,6 @@
 package gift.common.annotation;
 
-import gift.common.annotation.validator.NameValidator;
+import gift.common.annotation.validator.ProductNameValidator;
 import jakarta.validation.Constraint;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -9,8 +9,8 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = NameValidator.class)
-public @interface NameValidation {
+@Constraint(validatedBy = ProductNameValidator.class)
+public @interface ProductNameValidation {
 
     String message() default "유효하지 않은 상품명입니다.";
 
